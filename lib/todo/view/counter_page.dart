@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:premium_todo/design_system/molecules/ds_text_form_field.dart';
-import 'package:premium_todo/todo/todo.dart';
+import 'package:premium_todo/todo/bloc/todo_bloc.dart';
 
 class CounterPage extends StatelessWidget {
   const CounterPage({super.key});
@@ -9,7 +9,7 @@ class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => TodoCubit(),
+      create: (_) => TodoBloc(),
       child: const CounterView(),
     );
   }
@@ -28,7 +28,7 @@ class CounterView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           FloatingActionButton(
-            onPressed: () => context.read<TodoCubit>()..add(CreateTodo()),
+            onPressed: () => context.read<TodoBloc>()..add(CreateTodo()),
             child: const Icon(Icons.add),
           ),
         ],
@@ -47,9 +47,9 @@ class CounterText extends StatelessWidget {
         DSTextField(
           label: 'Nome',
           onChanged: (value) =>
-              context.read<TodoCubit>()..add(NameChanged(name: value)),
+              context.read<TodoBloc>()..add(NameChanged(name: value)),
         ),
-        BlocBuilder<TodoCubit, TodoState>(
+        BlocBuilder<TodoBloc, TodoState>(
           builder: (context, state) => Wrap(
             children: [
               for (final todo in state.todos) Text(todo.name),

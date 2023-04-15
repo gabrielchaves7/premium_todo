@@ -8,8 +8,8 @@ import 'package:premium_todo/todo/usecases/create_task_usecase.dart';
 part 'todo_state.dart';
 part 'todo_event.dart';
 
-class TodoCubit extends Bloc<TodoEvent, TodoState> {
-  TodoCubit({CreateTodoUC? createTodoUC})
+class TodoBloc extends Bloc<TodoEvent, TodoState> {
+  TodoBloc({CreateTodoUC? createTodoUC})
       : super(TodoState(todoForm: TodoForm())) {
     _createTodoUC = createTodoUC ?? getIt.get<CreateTodoUC>();
 

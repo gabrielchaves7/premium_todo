@@ -1,4 +1,4 @@
-part of 'todo_cubit.dart';
+part of 'todo_bloc.dart';
 
 class TodoState extends Equatable {
   const TodoState({
