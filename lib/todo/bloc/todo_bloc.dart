@@ -18,6 +18,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     on<CreateTodo>(_mapCreateTodoEventToState);
     on<NameChanged>(_mapNameChangedEventToState);
     on<GetTodos>(_mapGetTodosEventToState);
+    on<UpdateTodoStatus>(_mapUpdateTodoStatusEventToState);
   }
 
   late final AddTodoUC _addTodoUC;
@@ -54,5 +55,16 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       (l) => print(l),
       (r) => emit(state.copyWith(newTodos: r)),
     );
+  }
+
+  Future<void> _mapUpdateTodoStatusEventToState(
+    UpdateTodoStatus event,
+    Emitter<TodoState> emit,
+  ) async {
+    final updatedTodos = state.todos;
+    final index =
+        state.todos.indexWhere((element) => element.name == event.name);
+    updatedTodos[index].status = event.newStatus;
+    emit(state.copyWith(newTodos: updatedTodos));
   }
 }
