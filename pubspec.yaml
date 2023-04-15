@@ -1,0 +1,35 @@
+name: premium_todo
+description: ToDo list
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+
+dependencies:
+  bloc: ^8.1.1
+  build_runner: ^2.3.3
+  dartz: ^0.10.1
+  equatable: ^2.0.5
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.2
+  flutter_localizations:
+    sdk: flutter
+  formz: ^0.6.0
+  get_it: ^7.2.0
+  intl: ^0.17.0
+  rxdart: ^0.27.7
+  shared_preferences: ^2.1.0
+
+dev_dependencies:
+  bloc_test: ^9.1.1
+  flutter_test:
+    sdk: flutter
+  json_serializable: ^6.6.1
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.1.0
+
+flutter:
+  uses-material-design: true
+  generate: true
