@@ -3,20 +3,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:premium_todo/design_system/molecules/ds_text_form_field.dart';
 import 'package:premium_todo/todo/bloc/todo_bloc.dart';
 
-class CounterPage extends StatelessWidget {
-  const CounterPage({super.key});
+class TodoPage extends StatelessWidget {
+  const TodoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => TodoBloc(),
-      child: const CounterView(),
+      child: const TodoView(),
     );
   }
 }
 
-class CounterView extends StatelessWidget {
-  const CounterView({super.key});
+class TodoView extends StatefulWidget {
+  const TodoView({super.key});
+
+  @override
+  State<TodoView> createState() => _TodoViewState();
+}
+
+class _TodoViewState extends State<TodoView> {
+  @override
+  void initState() {
+    context.read<TodoBloc>().add(GetTodos());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +61,24 @@ class CounterText extends StatelessWidget {
               context.read<TodoBloc>()..add(NameChanged(name: value)),
         ),
         BlocBuilder<TodoBloc, TodoState>(
-          builder: (context, state) => Wrap(
-            children: [
-              for (final todo in state.todos) Text(todo.name),
-            ],
-          ),
+          builder: (context, state) {
+            Widget widget = const CircularProgressIndicator();
+            final todos = state.todos;
+
+            if (todos.isNotEmpty) {
+              widget = Expanded(
+                child: ListView.builder(
+                  itemCount: todos.length,
+                  itemBuilder: (context, index) {
+                    final todo = todos[index];
+                    return ListTile(title: Text(todo.name));
+                  },
+                ),
+              );
+            }
+
+            return widget;
+          },
         ),
       ],
     );

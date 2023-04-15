@@ -13,7 +13,7 @@ class App extends StatelessWidget {
           accentColor: const Color(0xFF13B9FF),
         ),
       ),
-      home: const CounterPage(),
+      home: const TodoPage(),
     );
   }
 }

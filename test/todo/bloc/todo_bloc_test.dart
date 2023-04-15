@@ -5,23 +5,25 @@ import 'package:mocktail/mocktail.dart';
 import 'package:premium_todo/todo/bloc/todo_bloc.dart';
 import 'package:premium_todo/todo/forms/todo_form.dart';
 import 'package:premium_todo/todo/model/todo_model.dart';
-import 'package:premium_todo/todo/usecases/create_task_usecase.dart';
 
-class MockCreateTodoUC extends Mock implements CreateTodoUC {}
+import '../todos_test.dart';
 
 void main() {
-  setUpAll(() {
-    registerFallbackValue(TodoModel('a', 'a'));
-  });
   group('TodoBloc', () {
     blocTest<TodoBloc, TodoState>(
       'should add new todo to array when createTodo is called',
       build: () {
         final mockedTodoUc = MockCreateTodoUC();
-        when(() => mockedTodoUc.call(any())).thenAnswer(
+        when(
+          () => mockedTodoUc.call([
+            TodoModel(
+              name: 'Teste',
+            )
+          ]),
+        ).thenAnswer(
           (_) async => right(true),
         );
-        final todoBloc = TodoBloc(createTodoUC: mockedTodoUc);
+        final todoBloc = mockTodoBloc(addTodoUC: mockedTodoUc);
         todoBloc.state.todoForm.name = const NameInput.dirty(value: 'Teste');
 
         return todoBloc;
@@ -34,15 +36,26 @@ void main() {
 
     blocTest<TodoBloc, TodoState>(
       'should update name input when nameChanged is called',
-      build: () {
-        final mockedTodoUc = MockCreateTodoUC();
-        final todoBloc = TodoBloc(createTodoUC: mockedTodoUc);
-
-        return todoBloc;
-      },
+      build: mockTodoBloc,
       act: (bloc) => bloc.add(NameChanged(name: 'Teste')),
       verify: (_) {
         expect(_.state.todoForm.name.value, 'Teste');
+      },
+    );
+
+    blocTest<TodoBloc, TodoState>(
+      'should update todos when getTodos is called',
+      build: () {
+        final mockGetTodosUC = MockGetTodosUC();
+        when(mockGetTodosUC.call).thenAnswer(
+          (_) async => right([TodoModel(name: 'Teste')]),
+        );
+
+        return mockTodoBloc(getTodosUC: mockGetTodosUC);
+      },
+      act: (bloc) => bloc.add(GetTodos()),
+      verify: (_) {
+        expect(_.state.todos.length, 1);
       },
     );
   });

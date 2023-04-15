@@ -1,12 +1,9 @@
-// Obtain shared preferences.
-import 'dart:convert';
-
 import 'package:premium_todo/bootstrap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class DataSource {
-  Future<bool> saveMap(String key, Map<String, dynamic> value);
-  Future<Map<String, dynamic>> getMap(String key);
+  Future<bool> saveList(String key, List<String> value);
+  List<String> getList(String key);
 }
 
 class SharedPreferencesDataSource implements DataSource {
@@ -17,13 +14,12 @@ class SharedPreferencesDataSource implements DataSource {
   late final SharedPreferences _prefs;
 
   @override
-  Future<bool> saveMap(String key, Map<String, dynamic> value) async {
-    return _prefs.setString(key, json.encode(value));
+  Future<bool> saveList(String key, List<String> value) async {
+    return _prefs.setStringList(key, value);
   }
 
   @override
-  Future<Map<String, dynamic>> getMap(String key) async {
-    final jsonStr = _prefs.getString(key);
-    return json.decode(jsonStr!) as Map<String, dynamic>;
+  List<String> getList(String key) {
+    return _prefs.getStringList(key)!;
   }
 }

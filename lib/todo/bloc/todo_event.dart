@@ -11,3 +11,5 @@ class NameChanged extends TodoEvent {
   NameChanged({required this.name});
   final String name;
 }
+
+class GetTodos extends TodoEvent {}

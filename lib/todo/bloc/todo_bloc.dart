@@ -3,32 +3,36 @@ import 'package:equatable/equatable.dart';
 import 'package:premium_todo/bootstrap.dart';
 import 'package:premium_todo/todo/forms/todo_form.dart';
 import 'package:premium_todo/todo/model/todo_model.dart';
-import 'package:premium_todo/todo/usecases/create_task_usecase.dart';
+import 'package:premium_todo/todo/usecases/add_todo_usecase.dart';
+import 'package:premium_todo/todo/usecases/get_todos_usecase.dart';
 
 part 'todo_state.dart';
 part 'todo_event.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
-  TodoBloc({CreateTodoUC? createTodoUC})
+  TodoBloc({AddTodoUC? addTodoUC, GetTodosUC? getTodos})
       : super(TodoState(todoForm: TodoForm())) {
-    _createTodoUC = createTodoUC ?? getIt.get<CreateTodoUC>();
+    _addTodoUC = addTodoUC ?? getIt.get<AddTodoUC>();
+    _getTodos = getTodos ?? getIt.get<GetTodosUC>();
 
     on<CreateTodo>(_mapCreateTodoEventToState);
     on<NameChanged>(_mapNameChangedEventToState);
+    on<GetTodos>(_mapGetTodosEventToState);
   }
 
-  late final CreateTodoUC _createTodoUC;
+  late final AddTodoUC _addTodoUC;
+  late final GetTodosUC _getTodos;
 
   Future<void> _mapCreateTodoEventToState(
     CreateTodo event,
     Emitter<TodoState> emit,
   ) async {
-    final newTodo =
-        TodoModel(state.todoForm.name.value, state.todoForm.name.value);
-    final result = await _createTodoUC.call(newTodo);
+    final newTodo = TodoModel(name: state.todoForm.name.value);
+    final newTodos = [...state.todos, newTodo];
+    final result = await _addTodoUC.call(newTodos);
     result.fold(
       (l) => print(l),
-      (r) => emit(state.copyWith(newTodos: [...state.todos, newTodo])),
+      (r) => emit(state.copyWith(newTodos: newTodos)),
     );
   }
 
@@ -39,5 +43,16 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     final newTodoForm = state.todoForm
       ..name = NameInput.dirty(value: event.name);
     emit(state.copyWith(newTodoForm: newTodoForm));
+  }
+
+  Future<void> _mapGetTodosEventToState(
+    GetTodos event,
+    Emitter<TodoState> emit,
+  ) async {
+    final result = await _getTodos.call();
+    result.fold(
+      (l) => print(l),
+      (r) => emit(state.copyWith(newTodos: r)),
+    );
   }
 }

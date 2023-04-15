@@ -6,7 +6,8 @@ import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:premium_todo/todo/repository/todo_repository.dart';
 import 'package:premium_todo/todo/shared_preferences.dart';
-import 'package:premium_todo/todo/usecases/create_task_usecase.dart';
+import 'package:premium_todo/todo/usecases/add_todo_usecase.dart';
+import 'package:premium_todo/todo/usecases/get_todos_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
@@ -36,7 +37,8 @@ Future<void> setup() async {
     ..registerLazySingleton<DataSource>(SharedPreferencesDataSource.new)
     //repository
     ..registerLazySingleton<TodoRepository>(TodoRepository.new)
-    ..registerLazySingleton<CreateTodoUC>(CreateTodoUC.new);
+    ..registerLazySingleton<AddTodoUC>(AddTodoUC.new)
+    ..registerLazySingleton<GetTodosUC>(GetTodosUC.new);
 }
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {

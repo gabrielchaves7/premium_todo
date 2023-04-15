@@ -7,11 +7,17 @@ part of 'todo_model.dart';
 // **************************************************************************
 
 TodoModel _$TodoModelFromJson(Map<String, dynamic> json) => TodoModel(
-      json['name'] as String,
-      json['description'] as String,
+      name: json['name'] as String,
+      status: $enumDecodeNullable(_$TodoStatusEnumMap, json['status']) ??
+          TodoStatus.pending,
     );
 
 Map<String, dynamic> _$TodoModelToJson(TodoModel instance) => <String, dynamic>{
       'name': instance.name,
-      'description': instance.description,
+      'status': _$TodoStatusEnumMap[instance.status]!,
     };
+
+const _$TodoStatusEnumMap = {
+  TodoStatus.pending: 'pending',
+  TodoStatus.done: 'done',
+};

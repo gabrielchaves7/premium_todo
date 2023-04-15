@@ -12,10 +12,21 @@ class TodoRepository {
   }
   late final DataSource _dataSource;
 
-  Future<Either<Failure, bool>> createTodo(TodoModel todo) async {
+  Future<Either<Failure, bool>> addTodo(List<TodoModel> todos) async {
     try {
-      final response = await _dataSource.saveMap('todos', todo.toJson());
+      final response =
+          await _dataSource.saveList('todos', TodoModel.toStringList(todos));
       return Right(response);
+    } catch (e) {
+      return Left(CreateTodoFailure());
+    }
+  }
+
+  Future<Either<Failure, List<TodoModel>>> getTodos() async {
+    try {
+      final response = _dataSource.getList('todos');
+
+      return Right(TodoModel.fromStringList(response));
     } catch (e) {
       return Left(CreateTodoFailure());
     }
