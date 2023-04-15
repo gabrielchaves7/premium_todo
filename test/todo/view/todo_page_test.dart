@@ -26,6 +26,9 @@ void main() {
 
       expect(find.text('Todo 1'), findsOneWidget);
       expect(find.text('Todo 2'), findsOneWidget);
+      expect(find.text('All'), findsOneWidget);
+      expect(find.text('pending'), findsOneWidget);
+      expect(find.text('done'), findsOneWidget);
     });
   });
 }
