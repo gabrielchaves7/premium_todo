@@ -6,8 +6,8 @@ import 'package:premium_todo/todo/model/todo_model.dart';
 import 'package:premium_todo/todo/usecases/add_todo_usecase.dart';
 import 'package:premium_todo/todo/usecases/get_todos_usecase.dart';
 
-part 'todo_state.dart';
 part 'todo_event.dart';
+part 'todo_state.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
   TodoBloc({AddTodoUC? addTodoUC, GetTodosUC? getTodos})
@@ -61,10 +61,15 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     UpdateTodoStatus event,
     Emitter<TodoState> emit,
   ) async {
-    final updatedTodos = state.todos;
-    final index =
-        state.todos.indexWhere((element) => element.name == event.name);
-    updatedTodos[index].status = event.newStatus;
-    emit(state.copyWith(newTodos: updatedTodos));
+    final updatedTodos = List<TodoModel>.from(
+      state.todos.map((e) => TodoModel(name: e.name, status: e.status)),
+    );
+    updatedTodos[event.index].status = event.newStatus;
+    final result = await _addTodoUC.call(updatedTodos);
+
+    result.fold(
+      (l) => print(l),
+      (r) => emit(state.copyWith(newTodos: updatedTodos)),
+    );
   }
 }

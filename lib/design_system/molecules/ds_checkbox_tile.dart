@@ -18,7 +18,7 @@ class DsCheckboxTile extends StatelessWidget {
   final bool value;
 
   /// Called when the value of the checkbox should change.
-  final ValueChanged<bool>? onChanged;
+  final ValueChanged<bool?>? onChanged;
 
   @override
   Widget build(Object context) {
@@ -26,7 +26,7 @@ class DsCheckboxTile extends StatelessWidget {
       title: Text(title),
       leading: DsCheckbox(
         value: value,
-        onChanged: (value) => onChanged?.call(value ?? false),
+        onChanged: onChanged,
       ),
     );
   }

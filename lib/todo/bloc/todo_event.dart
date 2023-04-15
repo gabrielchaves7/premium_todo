@@ -15,7 +15,7 @@ class NameChanged extends TodoEvent {
 class GetTodos extends TodoEvent {}
 
 class UpdateTodoStatus extends TodoEvent {
-  UpdateTodoStatus({required this.name, required this.newStatus});
-  final String name;
+  UpdateTodoStatus({required this.index, required this.newStatus});
+  final int index;
   final TodoStatus newStatus;
 }

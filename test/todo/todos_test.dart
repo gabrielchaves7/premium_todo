@@ -5,7 +5,7 @@ import 'package:premium_todo/todo/todo.dart';
 import 'package:premium_todo/todo/usecases/add_todo_usecase.dart';
 import 'package:premium_todo/todo/usecases/get_todos_usecase.dart';
 
-class MockCreateTodoUC extends Mock implements AddTodoUC {}
+class MockAddTodoUC extends Mock implements AddTodoUC {}
 
 class MockGetTodosUC extends Mock implements GetTodosUC {}
 
@@ -15,7 +15,7 @@ void main() {}
 
 TodoBloc mockTodoBloc({AddTodoUC? addTodoUC, GetTodosUC? getTodosUC}) {
   return TodoBloc(
-    addTodoUC: addTodoUC ?? MockCreateTodoUC(),
+    addTodoUC: addTodoUC ?? MockAddTodoUC(),
     getTodos: getTodosUC ?? MockGetTodosUC(),
   );
 }

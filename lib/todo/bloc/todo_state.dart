@@ -10,7 +10,7 @@ class TodoState extends Equatable {
   final TodoForm todoForm;
 
   @override
-  List<Object?> get props => [todos];
+  List<Object?> get props => [todos, todoForm];
 
   TodoState copyWith({
     List<TodoModel>? newTodos,

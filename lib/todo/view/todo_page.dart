@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:premium_todo/design_system/molecules/ds_checkbox_tile.dart';
 import 'package:premium_todo/design_system/molecules/ds_text_form_field.dart';
 import 'package:premium_todo/todo/bloc/todo_bloc.dart';
+import 'package:premium_todo/todo/model/todo_model.dart';
 
 class TodoPage extends StatelessWidget {
   const TodoPage({super.key});
@@ -71,7 +73,21 @@ class CounterText extends StatelessWidget {
                   itemCount: todos.length,
                   itemBuilder: (context, index) {
                     final todo = todos[index];
-                    return ListTile(title: Text(todo.name));
+                    final isChecked = todo.status == TodoStatus.done;
+                    return DsCheckboxTile(
+                      title: todo.name,
+                      value: isChecked,
+                      onChanged: (value) {
+                        context.read<TodoBloc>().add(
+                              UpdateTodoStatus(
+                                index: index,
+                                newStatus: value!
+                                    ? TodoStatus.done
+                                    : TodoStatus.pending,
+                              ),
+                            );
+                      },
+                    );
                   },
                 ),
               );
