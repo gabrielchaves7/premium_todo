@@ -13,7 +13,7 @@ class TodoList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TodoBloc, TodoState>(
       builder: (context, state) {
-        Widget widget = const CircularProgressIndicator();
+        Widget widget = const Center(child: CircularProgressIndicator());
         final todos = context.read<TodoBloc>().state.todoFilter.filterList(
               state.todos,
             );
