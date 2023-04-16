@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:premium_todo/design_system/atoms/spacing.dart';
+import 'package:premium_todo/design_system/molecules/ds_button.dart';
 import 'package:premium_todo/design_system/molecules/ds_text_form_field.dart';
 import 'package:premium_todo/todo/bloc/todo_bloc.dart';
 import 'package:premium_todo/todo/model/todo_model.dart';
@@ -66,22 +67,30 @@ class TodoDialog extends StatelessWidget {
         ),
       ),
       actions: <Widget>[
-        if (isDelete)
-          TextButton(
-            child: const Text('Delete'),
-            onPressed: () {
-              todoBloc.add(DeleteTodo(name: todo!.name));
-              Navigator.pop(context);
-            },
-          )
-        else
-          TextButton(
-            child: const Text('Save'),
-            onPressed: () {
-              todoBloc.add(CreateTodo());
-              Navigator.pop(context);
-            },
-          )
+        Row(
+          children: [
+            if (isDelete)
+              Expanded(
+                child: DsOutlinedButton(
+                  child: const Text('Delete'),
+                  onPressed: () {
+                    todoBloc.add(DeleteTodo(name: todo!.name));
+                    Navigator.pop(context);
+                  },
+                ),
+              )
+            else
+              Expanded(
+                child: DsOutlinedButton(
+                  child: const Text('Save'),
+                  onPressed: () {
+                    todoBloc.add(CreateTodo());
+                    Navigator.pop(context);
+                  },
+                ),
+              )
+          ],
+        )
       ],
     );
   }
