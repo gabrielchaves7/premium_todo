@@ -25,3 +25,8 @@ class ChangeTodoFilter extends TodoEvent {
   final TodoFilter todoFilter;
   final int newCurrentPage;
 }
+
+class DeleteTodo extends TodoEvent {
+  DeleteTodo({required this.name});
+  final String name;
+}

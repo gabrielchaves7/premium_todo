@@ -8,6 +8,7 @@ class DsCheckboxTile extends StatelessWidget {
     required this.title,
     required this.value,
     this.onChanged,
+    this.trailing,
     super.key,
   });
 
@@ -20,6 +21,9 @@ class DsCheckboxTile extends StatelessWidget {
   /// Called when the value of the checkbox should change.
   final ValueChanged<bool?>? onChanged;
 
+  ///A widget to display after the title.
+  final Widget? trailing;
+
   @override
   Widget build(Object context) {
     return ListTile(
@@ -28,6 +32,7 @@ class DsCheckboxTile extends StatelessWidget {
         value: value,
         onChanged: onChanged,
       ),
+      trailing: trailing,
     );
   }
 }

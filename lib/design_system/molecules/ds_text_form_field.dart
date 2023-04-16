@@ -16,6 +16,7 @@ class DSTextField extends StatelessWidget {
     this.onChanged,
     this.maxLines = 1,
     this.hintText,
+    this.enabled = true,
     super.key,
   });
 
@@ -43,6 +44,9 @@ class DSTextField extends StatelessWidget {
   /// Hint to show inside the input
   final String? hintText;
 
+  /// If text field allows user input
+  final bool enabled;
+
   @override
   Widget build(BuildContext context) {
     final hasError = errorText != null;
@@ -55,6 +59,7 @@ class DSTextField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextField(
+            enabled: enabled,
             onChanged: (value) => onChanged?.call(value.replaceAll(',', '')),
             keyboardType: textInputType,
             inputFormatters: inputFormatters,
@@ -65,6 +70,7 @@ class DSTextField extends StatelessWidget {
               ),
             ),
             decoration: InputDecoration(
+              border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
               hintText: hintText,
               contentPadding: const EdgeInsets.symmetric(
                   vertical: DsSpacing.xs, horizontal: DsSpacing.x),
