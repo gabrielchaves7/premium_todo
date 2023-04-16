@@ -6,8 +6,17 @@ import 'package:premium_todo/todo/bloc/todo_bloc.dart';
 import 'package:premium_todo/todo/model/todo_model.dart';
 
 class TodoDialog extends StatelessWidget {
-  const TodoDialog({super.key, this.isDelete = false, this.todo});
+  const TodoDialog({
+    required this.todoBloc,
+    super.key,
+    this.isDelete = false,
+    this.todo,
+  }) : assert(
+          (isDelete && todo != null) || (!isDelete && todo == null),
+          'if isDelete is true, todo cant be null',
+        );
 
+  final TodoBloc todoBloc;
   final TodoModel? todo;
   final bool isDelete;
 
@@ -50,8 +59,7 @@ class TodoDialog extends StatelessWidget {
                 enabled: !isDelete,
                 onChanged: isDelete
                     ? null
-                    : (value) =>
-                        context.read<TodoBloc>()..add(NameChanged(name: value)),
+                    : (value) => todoBloc.add(NameChanged(name: value)),
               ),
             ],
           ),
@@ -62,14 +70,16 @@ class TodoDialog extends StatelessWidget {
           TextButton(
             child: const Text('Delete'),
             onPressed: () {
-              context.read<TodoBloc>().add(DeleteTodo(name: ''));
+              todoBloc.add(DeleteTodo(name: todo!.name));
+              Navigator.pop(context);
             },
           )
         else
           TextButton(
             child: const Text('Save'),
             onPressed: () {
-              context.read<TodoBloc>().add(CreateTodo());
+              todoBloc.add(CreateTodo());
+              Navigator.pop(context);
             },
           )
       ],

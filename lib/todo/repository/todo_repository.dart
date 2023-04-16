@@ -12,7 +12,7 @@ class TodoRepository {
   }
   late final DataSource _dataSource;
 
-  Future<Either<Failure, bool>> addTodo(List<TodoModel> todos) async {
+  Future<Either<Failure, bool>> saveTodos(List<TodoModel> todos) async {
     try {
       final response =
           await _dataSource.saveList('todos', TodoModel.toStringList(todos));

@@ -1,7 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:premium_todo/todo/bloc/todo_bloc.dart';
 import 'package:premium_todo/todo/forms/todo_form.dart';
 import 'package:premium_todo/todo/model/todo_model.dart';
@@ -13,16 +11,15 @@ void main() {
     blocTest<TodoBloc, TodoState>(
       'should add new todo to array when CreateTodo is called',
       build: () {
-        final mockedAddTodoUc = MockAddTodoUC();
-        when(
-          () => mockedAddTodoUc.call([
+        final mockedAddTodoUc = mockAddTodoUC(
+          newTodos: [
             TodoModel(
               name: 'Teste',
             )
-          ]),
-        ).thenAnswer(
-          (_) async => right(true),
+          ],
+          result: true,
         );
+
         final todoBloc = mockTodoBloc(addTodoUC: mockedAddTodoUc);
         todoBloc.state.todoForm.name = const NameInput.dirty(value: 'Teste');
 
@@ -46,12 +43,8 @@ void main() {
     blocTest<TodoBloc, TodoState>(
       'should update todos when GetTodos is called',
       build: () {
-        final mockGetTodosUC = MockGetTodosUC();
-        when(mockGetTodosUC.call).thenAnswer(
-          (_) async => right([TodoModel(name: 'Teste')]),
-        );
-
-        return mockTodoBloc(getTodosUC: mockGetTodosUC);
+        final mockedGetTodosUC = mockGetTodosUC([TodoModel(name: 'Teste')]);
+        return mockTodoBloc(getTodosUC: mockedGetTodosUC);
       },
       act: (bloc) => bloc.add(GetTodos()),
       verify: (_) {
@@ -62,20 +55,14 @@ void main() {
     blocTest<TodoBloc, TodoState>(
       'should update todos when UpdateTodoStatus is called',
       build: () {
-        final mockedAddTodoUc = MockAddTodoUC();
-        final mockGetTodosUC = MockGetTodosUC();
-        when(
-          () => mockedAddTodoUc
-              .call([TodoModel(name: 'Teste', status: TodoStatus.done)]),
-        ).thenAnswer(
-          (_) async => right(true),
+        final mockedAddTodoUc = mockAddTodoUC(
+          newTodos: [TodoModel(name: 'Teste', status: TodoStatus.done)],
+          result: true,
         );
-        when(mockGetTodosUC.call).thenAnswer(
-          (_) async => right([TodoModel(name: 'Teste')]),
-        );
+        final mockedGetTodosUC = mockGetTodosUC([TodoModel(name: 'Teste')]);
 
         return mockTodoBloc(
-          getTodosUC: mockGetTodosUC,
+          getTodosUC: mockedGetTodosUC,
           addTodoUC: mockedAddTodoUc,
         );
       },
@@ -92,17 +79,12 @@ void main() {
     blocTest<TodoBloc, TodoState>(
       'should update todo filter when ChangeTodoFilter is called',
       build: () {
-        final mockGetTodosUC = MockGetTodosUC();
-        when(mockGetTodosUC.call).thenAnswer(
-          (_) async => right([
-            TodoModel(name: 'Teste 1', status: TodoStatus.done),
-            TodoModel(name: 'Teste 2')
-          ]),
-        );
+        final mockedGetTodosUC = mockGetTodosUC([
+          TodoModel(name: 'Teste 1', status: TodoStatus.done),
+          TodoModel(name: 'Teste 2')
+        ]);
 
-        return mockTodoBloc(
-          getTodosUC: mockGetTodosUC,
-        );
+        return mockTodoBloc(getTodosUC: mockedGetTodosUC);
       },
       act: (bloc) {
         bloc
@@ -119,6 +101,27 @@ void main() {
         expect(filteredTodos.length, 1);
         expect(_.state.currentPage, 1);
         expect(filteredTodos.first.status, TodoStatus.pending);
+      },
+    );
+
+    blocTest<TodoBloc, TodoState>(
+      'should remove todo from array when DeleteTodo is called',
+      build: () {
+        final mockedDeleteTodoUC = mockDeleteTodoUC(newTodos: [], result: true);
+        final mockedGetTodos = mockGetTodosUC([TodoModel(name: 'Todo 1')]);
+
+        final todoBloc = mockTodoBloc(
+          deleteTodoUC: mockedDeleteTodoUC,
+          getTodosUC: mockedGetTodos,
+        );
+
+        return todoBloc;
+      },
+      act: (bloc) => bloc
+        ..add(GetTodos())
+        ..add(DeleteTodo(name: 'Todo 1')),
+      verify: (_) {
+        expect(_.state.todos.length, 0);
       },
     );
   });

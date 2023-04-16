@@ -4,26 +4,31 @@ import 'package:premium_todo/bootstrap.dart';
 import 'package:premium_todo/todo/forms/todo_form.dart';
 import 'package:premium_todo/todo/model/todo_model.dart';
 import 'package:premium_todo/todo/usecases/add_todo_usecase.dart';
+import 'package:premium_todo/todo/usecases/delete_todo_usecase.dart';
 import 'package:premium_todo/todo/usecases/get_todos_usecase.dart';
 
 part 'todo_event.dart';
 part 'todo_state.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
-  TodoBloc({AddTodoUC? addTodoUC, GetTodosUC? getTodos})
+  TodoBloc(
+      {AddTodoUC? addTodoUC, GetTodosUC? getTodos, DeleteTodoUC? deleteTodoUC})
       : super(TodoState(todoForm: TodoForm(), todoFilter: TodoFilterAll())) {
     _addTodoUC = addTodoUC ?? getIt.get<AddTodoUC>();
     _getTodos = getTodos ?? getIt.get<GetTodosUC>();
+    _deleteTodoUC = deleteTodoUC ?? getIt.get<DeleteTodoUC>();
 
     on<CreateTodo>(_mapCreateTodoEventToState);
     on<NameChanged>(_mapNameChangedEventToState);
     on<GetTodos>(_mapGetTodosEventToState);
     on<UpdateTodoStatus>(_mapUpdateTodoStatusEventToState);
     on<ChangeTodoFilter>(_mapChangeTodoFilterEventToState);
+    on<DeleteTodo>(_mapDeleteTodoEventToState);
   }
 
   late final AddTodoUC _addTodoUC;
   late final GetTodosUC _getTodos;
+  late final DeleteTodoUC _deleteTodoUC;
 
   Future<void> _mapCreateTodoEventToState(
     CreateTodo event,
@@ -83,6 +88,22 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         newTodofilter: event.todoFilter,
         newCurrentPage: event.newCurrentPage,
       ),
+    );
+  }
+
+  Future<void> _mapDeleteTodoEventToState(
+    DeleteTodo event,
+    Emitter<TodoState> emit,
+  ) async {
+    final newTodos = List<TodoModel>.from(
+      state.todos.map((e) => TodoModel(name: e.name, status: e.status)),
+    )..removeWhere((e) => e.name == event.name);
+
+    final result = await _deleteTodoUC.call(newTodos);
+
+    result.fold(
+      (l) => print(l),
+      (r) => emit(state.copyWith(newTodos: newTodos)),
     );
   }
 }
