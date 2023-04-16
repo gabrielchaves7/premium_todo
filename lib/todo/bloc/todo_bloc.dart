@@ -11,7 +11,7 @@ part 'todo_state.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
   TodoBloc({AddTodoUC? addTodoUC, GetTodosUC? getTodos})
-      : super(TodoState(todoForm: TodoForm())) {
+      : super(TodoState(todoForm: TodoForm(), todoFilter: TodoFilterAll())) {
     _addTodoUC = addTodoUC ?? getIt.get<AddTodoUC>();
     _getTodos = getTodos ?? getIt.get<GetTodosUC>();
 
@@ -19,6 +19,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     on<NameChanged>(_mapNameChangedEventToState);
     on<GetTodos>(_mapGetTodosEventToState);
     on<UpdateTodoStatus>(_mapUpdateTodoStatusEventToState);
+    on<ChangeTodoFilter>(_mapChangeTodoFilterEventToState);
   }
 
   late final AddTodoUC _addTodoUC;
@@ -37,10 +38,10 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     );
   }
 
-  Future<void> _mapNameChangedEventToState(
+  void _mapNameChangedEventToState(
     NameChanged event,
     Emitter<TodoState> emit,
-  ) async {
+  ) {
     final newTodoForm = state.todoForm
       ..name = NameInput.dirty(value: event.name);
     emit(state.copyWith(newTodoForm: newTodoForm));
@@ -70,6 +71,18 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     result.fold(
       (l) => print(l),
       (r) => emit(state.copyWith(newTodos: updatedTodos)),
+    );
+  }
+
+  void _mapChangeTodoFilterEventToState(
+    ChangeTodoFilter event,
+    Emitter<TodoState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        newTodofilter: event.todoFilter,
+        newCurrentPage: event.newCurrentPage,
+      ),
     );
   }
 }

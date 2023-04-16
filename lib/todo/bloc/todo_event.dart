@@ -19,3 +19,9 @@ class UpdateTodoStatus extends TodoEvent {
   final int index;
   final TodoStatus newStatus;
 }
+
+class ChangeTodoFilter extends TodoEvent {
+  ChangeTodoFilter({required this.todoFilter, required this.newCurrentPage});
+  final TodoFilter todoFilter;
+  final int newCurrentPage;
+}

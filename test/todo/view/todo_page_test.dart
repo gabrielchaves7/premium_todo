@@ -30,5 +30,33 @@ void main() {
       expect(find.text('pending'), findsOneWidget);
       expect(find.text('done'), findsOneWidget);
     });
+
+    testWidgets('should filter todos when filter change', (tester) async {
+      final getTodosUC = mockGetTodosUC(
+        [
+          TodoModel(name: 'Todo 1'),
+          TodoModel(name: 'Todo 2', status: TodoStatus.done)
+        ],
+      );
+      final todoBloc = mockTodoBloc(getTodosUC: getTodosUC);
+
+      await tester.pumpApp(
+        BlocProvider.value(
+          value: todoBloc,
+          child: const TodoView(),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Todo 1'), findsOneWidget);
+      expect(find.text('Todo 2'), findsOneWidget);
+
+      await tester.tap(find.text('pending'));
+      await tester.pump();
+
+      expect(find.text('Todo 1'), findsOneWidget);
+      expect(find.text('Todo 2'), findsNothing);
+    });
   });
 }

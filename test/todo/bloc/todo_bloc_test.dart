@@ -88,5 +88,38 @@ void main() {
         expect(_.state.todos.first.status, TodoStatus.done);
       },
     );
+
+    blocTest<TodoBloc, TodoState>(
+      'should update todo filter when ChangeTodoFilter is called',
+      build: () {
+        final mockGetTodosUC = MockGetTodosUC();
+        when(mockGetTodosUC.call).thenAnswer(
+          (_) async => right([
+            TodoModel(name: 'Teste 1', status: TodoStatus.done),
+            TodoModel(name: 'Teste 2')
+          ]),
+        );
+
+        return mockTodoBloc(
+          getTodosUC: mockGetTodosUC,
+        );
+      },
+      act: (bloc) {
+        bloc
+          ..add(GetTodos())
+          ..add(
+            ChangeTodoFilter(
+              newCurrentPage: 1,
+              todoFilter: TodoFilterPending(),
+            ),
+          );
+      },
+      verify: (_) {
+        final filteredTodos = _.state.todoFilter.filterList(_.state.todos);
+        expect(filteredTodos.length, 1);
+        expect(_.state.currentPage, 1);
+        expect(filteredTodos.first.status, TodoStatus.pending);
+      },
+    );
   });
 }
