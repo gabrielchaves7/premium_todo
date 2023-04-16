@@ -15,8 +15,8 @@ class NameChanged extends TodoEvent {
 class GetTodos extends TodoEvent {}
 
 class UpdateTodoStatus extends TodoEvent {
-  UpdateTodoStatus({required this.index, required this.newStatus});
-  final int index;
+  UpdateTodoStatus({required this.id, required this.newStatus});
+  final String id;
   final TodoStatus newStatus;
 }
 
@@ -27,6 +27,6 @@ class ChangeTodoFilter extends TodoEvent {
 }
 
 class DeleteTodo extends TodoEvent {
-  DeleteTodo({required this.name});
-  final String name;
+  DeleteTodo({required this.id});
+  final String id;
 }

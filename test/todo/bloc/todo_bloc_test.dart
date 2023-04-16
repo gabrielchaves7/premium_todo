@@ -14,6 +14,7 @@ void main() {
         final mockedAddTodoUc = mockAddTodoUC(
           newTodos: [
             TodoModel(
+              id: '1',
               name: 'Teste',
             )
           ],
@@ -43,7 +44,8 @@ void main() {
     blocTest<TodoBloc, TodoState>(
       'should update todos when GetTodos is called',
       build: () {
-        final mockedGetTodosUC = mockGetTodosUC([TodoModel(name: 'Teste')]);
+        final mockedGetTodosUC =
+            mockGetTodosUC([TodoModel(id: '1', name: 'Teste')]);
         return mockTodoBloc(getTodosUC: mockedGetTodosUC);
       },
       act: (bloc) => bloc.add(GetTodos()),
@@ -56,10 +58,13 @@ void main() {
       'should update todos when UpdateTodoStatus is called',
       build: () {
         final mockedAddTodoUc = mockAddTodoUC(
-          newTodos: [TodoModel(name: 'Teste', status: TodoStatus.done)],
+          newTodos: [
+            TodoModel(id: '1', name: 'Teste', status: TodoStatus.done)
+          ],
           result: true,
         );
-        final mockedGetTodosUC = mockGetTodosUC([TodoModel(name: 'Teste')]);
+        final mockedGetTodosUC =
+            mockGetTodosUC([TodoModel(id: '1', name: 'Teste')]);
 
         return mockTodoBloc(
           getTodosUC: mockedGetTodosUC,
@@ -69,7 +74,7 @@ void main() {
       act: (bloc) {
         bloc
           ..add(GetTodos())
-          ..add(UpdateTodoStatus(newStatus: TodoStatus.done, index: 0));
+          ..add(UpdateTodoStatus(newStatus: TodoStatus.done, id: '1'));
       },
       verify: (_) {
         expect(_.state.todos.first.status, TodoStatus.done);
@@ -80,8 +85,8 @@ void main() {
       'should update todo filter when ChangeTodoFilter is called',
       build: () {
         final mockedGetTodosUC = mockGetTodosUC([
-          TodoModel(name: 'Teste 1', status: TodoStatus.done),
-          TodoModel(name: 'Teste 2')
+          TodoModel(id: '1', name: 'Teste 1', status: TodoStatus.done),
+          TodoModel(id: '2', name: 'Teste 2')
         ]);
 
         return mockTodoBloc(getTodosUC: mockedGetTodosUC);
@@ -108,7 +113,8 @@ void main() {
       'should remove todo from array when DeleteTodo is called',
       build: () {
         final mockedDeleteTodoUC = mockDeleteTodoUC(newTodos: [], result: true);
-        final mockedGetTodos = mockGetTodosUC([TodoModel(name: 'Todo 1')]);
+        final mockedGetTodos =
+            mockGetTodosUC([TodoModel(id: '1', name: 'Todo 1')]);
 
         final todoBloc = mockTodoBloc(
           deleteTodoUC: mockedDeleteTodoUC,
@@ -119,7 +125,7 @@ void main() {
       },
       act: (bloc) => bloc
         ..add(GetTodos())
-        ..add(DeleteTodo(name: 'Todo 1')),
+        ..add(DeleteTodo(id: '1')),
       verify: (_) {
         expect(_.state.todos.length, 0);
       },

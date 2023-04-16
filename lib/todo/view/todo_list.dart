@@ -31,7 +31,7 @@ class TodoList extends StatelessWidget {
                   onChanged: (value) {
                     context.read<TodoBloc>().add(
                           UpdateTodoStatus(
-                            index: index,
+                            id: todo.id,
                             newStatus:
                                 value! ? TodoStatus.done : TodoStatus.pending,
                           ),

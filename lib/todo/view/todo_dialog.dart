@@ -74,7 +74,7 @@ class TodoDialog extends StatelessWidget {
                 child: DsOutlinedButton(
                   child: const Text('Delete'),
                   onPressed: () {
-                    todoBloc.add(DeleteTodo(name: todo!.name));
+                    todoBloc.add(DeleteTodo(id: todo!.id));
                     Navigator.pop(context);
                   },
                 ),

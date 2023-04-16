@@ -33,11 +33,14 @@ class _TodoViewState extends State<TodoView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('To do list')),
-      body: Column(
-        children: const [
-          TodoFilters(),
-          TodoList(),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: const [
+            TodoFilters(),
+            TodoList(),
+          ],
+        ),
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,

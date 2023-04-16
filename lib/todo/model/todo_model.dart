@@ -14,7 +14,8 @@ enum TodoStatus {
 
 @JsonSerializable()
 class TodoModel extends Equatable {
-  TodoModel({required this.name, this.status = TodoStatus.pending});
+  TodoModel(
+      {required this.id, required this.name, this.status = TodoStatus.pending});
 
   factory TodoModel.fromJson(Map<String, dynamic> json) =>
       _$TodoModelFromJson(json);
@@ -23,6 +24,7 @@ class TodoModel extends Equatable {
   @override
   List<Object?> get props => [name, status];
 
+  String id;
   String name;
   TodoStatus status;
 

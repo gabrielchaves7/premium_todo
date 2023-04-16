@@ -6,6 +6,7 @@ import 'package:premium_todo/todo/model/todo_model.dart';
 import 'package:premium_todo/todo/usecases/add_todo_usecase.dart';
 import 'package:premium_todo/todo/usecases/delete_todo_usecase.dart';
 import 'package:premium_todo/todo/usecases/get_todos_usecase.dart';
+import 'package:uuid/uuid.dart';
 
 part 'todo_event.dart';
 part 'todo_state.dart';
@@ -34,7 +35,8 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     CreateTodo event,
     Emitter<TodoState> emit,
   ) async {
-    final newTodo = TodoModel(name: state.todoForm.name.value);
+    final newTodo =
+        TodoModel(id: const Uuid().v4(), name: state.todoForm.name.value);
     final newTodos = [...state.todos, newTodo];
     final result = await _addTodoUC.call(newTodos);
     result.fold(
@@ -68,9 +70,10 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     Emitter<TodoState> emit,
   ) async {
     final updatedTodos = List<TodoModel>.from(
-      state.todos.map((e) => TodoModel(name: e.name, status: e.status)),
+      state.todos
+          .map((e) => TodoModel(id: e.id, name: e.name, status: e.status)),
     );
-    updatedTodos[event.index].status = event.newStatus;
+    updatedTodos.firstWhere((e) => e.id == event.id).status = event.newStatus;
     final result = await _addTodoUC.call(updatedTodos);
 
     result.fold(
@@ -96,8 +99,9 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     Emitter<TodoState> emit,
   ) async {
     final newTodos = List<TodoModel>.from(
-      state.todos.map((e) => TodoModel(name: e.name, status: e.status)),
-    )..removeWhere((e) => e.name == event.name);
+      state.todos
+          .map((e) => TodoModel(id: e.id, name: e.name, status: e.status)),
+    )..removeWhere((e) => e.id == event.id);
 
     final result = await _deleteTodoUC.call(newTodos);
 

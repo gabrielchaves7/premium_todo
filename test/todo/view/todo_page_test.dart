@@ -12,7 +12,10 @@ void main() {
   group('TodoView', () {
     testWidgets('should render todos list', (tester) async {
       final getTodosUC = mockGetTodosUC(
-        [TodoModel(name: 'Todo 1'), TodoModel(name: 'Todo 2')],
+        [
+          TodoModel(id: '1', name: 'Todo 1'),
+          TodoModel(id: '2', name: 'Todo 2')
+        ],
       );
       final todoBloc = mockTodoBloc(getTodosUC: getTodosUC);
 
@@ -35,8 +38,8 @@ void main() {
     testWidgets('should filter todos when filter change', (tester) async {
       final getTodosUC = mockGetTodosUC(
         [
-          TodoModel(name: 'Todo 1'),
-          TodoModel(name: 'Todo 2', status: TodoStatus.done)
+          TodoModel(id: '1', name: 'Todo 1'),
+          TodoModel(id: '2', name: 'Todo 2', status: TodoStatus.done)
         ],
       );
       final todoBloc = mockTodoBloc(getTodosUC: getTodosUC);
@@ -62,12 +65,12 @@ void main() {
 
     testWidgets('should add todo to list', (tester) async {
       final todos = [
-        TodoModel(name: 'Todo 1'),
-        TodoModel(name: 'Todo 2', status: TodoStatus.done)
+        TodoModel(id: '1', name: 'Todo 1'),
+        TodoModel(id: '2', name: 'Todo 2', status: TodoStatus.done)
       ];
       final getTodosUC = mockGetTodosUC(todos);
       final addTodoUC = mockAddTodoUC(
-        newTodos: [...todos, TodoModel(name: 'Todo 3')],
+        newTodos: [...todos, TodoModel(id: '3', name: 'Todo 3')],
         result: true,
       );
       final todoBloc = mockTodoBloc(
@@ -99,7 +102,7 @@ void main() {
     });
 
     testWidgets('should delete todo from list', (tester) async {
-      final todo = TodoModel(name: 'Todo 1');
+      final todo = TodoModel(id: '1', name: 'Todo 1');
       final getTodosUC = mockGetTodosUC([todo]);
       final deleteTodoUC = mockDeleteTodoUC(newTodos: [], result: true);
       final todoBloc = mockTodoBloc(

@@ -27,6 +27,8 @@ class DsCheckboxTile extends StatelessWidget {
   @override
   Widget build(Object context) {
     return ListTile(
+      minVerticalPadding: 0,
+      contentPadding: EdgeInsets.zero,
       title: Text(title),
       leading: DsCheckbox(
         value: value,
