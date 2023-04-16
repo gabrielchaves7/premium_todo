@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:premium_todo/bootstrap.dart';
+import 'package:premium_todo/design_system/atoms/ds_snackbar.dart';
+import 'package:premium_todo/todo/bloc/todo_filters.dart';
 import 'package:premium_todo/todo/forms/todo_form.dart';
 import 'package:premium_todo/todo/model/todo_model.dart';
 import 'package:premium_todo/todo/usecases/add_todo_usecase.dart';
@@ -12,9 +14,11 @@ part 'todo_event.dart';
 part 'todo_state.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
-  TodoBloc(
-      {AddTodoUC? addTodoUC, GetTodosUC? getTodos, DeleteTodoUC? deleteTodoUC})
-      : super(TodoState(todoForm: TodoForm(), todoFilter: TodoFilterAll())) {
+  TodoBloc({
+    AddTodoUC? addTodoUC,
+    GetTodosUC? getTodos,
+    DeleteTodoUC? deleteTodoUC,
+  }) : super(TodoState(todoForm: TodoForm(), todoFilter: TodoFilterAll())) {
     _addTodoUC = addTodoUC ?? getIt.get<AddTodoUC>();
     _getTodos = getTodos ?? getIt.get<GetTodosUC>();
     _deleteTodoUC = deleteTodoUC ?? getIt.get<DeleteTodoUC>();
@@ -40,8 +44,14 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     final newTodos = [...state.todos, newTodo];
     final result = await _addTodoUC.call(newTodos);
     result.fold(
-      (l) => print(l),
-      (r) => emit(state.copyWith(newTodos: newTodos)),
+      (l) =>
+          emit(state.copyWith(dsSnackbarType: DsSnackbarType.todoCreateError)),
+      (r) => emit(
+        state.copyWith(
+          newTodos: newTodos,
+          dsSnackbarType: DsSnackbarType.todoCreateSuccess,
+        ),
+      ),
     );
   }
 
@@ -60,7 +70,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   ) async {
     final result = await _getTodos.call();
     result.fold(
-      (l) => print(l),
+      (l) => emit(state.copyWith(dsSnackbarType: DsSnackbarType.todoGetError)),
       (r) => emit(state.copyWith(newTodos: r)),
     );
   }
@@ -74,12 +84,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
           .map((e) => TodoModel(id: e.id, name: e.name, status: e.status)),
     );
     updatedTodos.firstWhere((e) => e.id == event.id).status = event.newStatus;
-    final result = await _addTodoUC.call(updatedTodos);
-
-    result.fold(
-      (l) => print(l),
-      (r) => emit(state.copyWith(newTodos: updatedTodos)),
-    );
+    emit(state.copyWith(newTodos: updatedTodos));
   }
 
   void _mapChangeTodoFilterEventToState(
@@ -106,8 +111,14 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     final result = await _deleteTodoUC.call(newTodos);
 
     result.fold(
-      (l) => print(l),
-      (r) => emit(state.copyWith(newTodos: newTodos)),
+      (l) =>
+          emit(state.copyWith(dsSnackbarType: DsSnackbarType.todoDeleteError)),
+      (r) => emit(
+        state.copyWith(
+          newTodos: newTodos,
+          dsSnackbarType: DsSnackbarType.todoDeleteSuccess,
+        ),
+      ),
     );
   }
 }

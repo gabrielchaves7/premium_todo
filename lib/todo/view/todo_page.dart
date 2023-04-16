@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:premium_todo/design_system/atoms/dialog.dart';
+import 'package:premium_todo/design_system/atoms/ds_snackbar.dart';
 import 'package:premium_todo/todo/bloc/todo_bloc.dart';
 import 'package:premium_todo/todo/view/todo_dialog.dart';
 import 'package:premium_todo/todo/view/todo_filters.dart';
@@ -33,13 +34,22 @@ class _TodoViewState extends State<TodoView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('To do list')),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: const [
-            TodoFilters(),
-            TodoList(),
-          ],
+      body: BlocListener<TodoBloc, TodoState>(
+        listener: (context, state) {
+          if (state.dsSnackbarType != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              DsSnackBar.getSnackBar(state.dsSnackbarType!),
+            );
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: const [
+              TodoFilters(),
+              TodoList(),
+            ],
+          ),
         ),
       ),
       floatingActionButton: Column(
