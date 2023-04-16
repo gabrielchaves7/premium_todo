@@ -16,6 +16,7 @@ class TodoFilters extends StatelessWidget {
             Expanded(
               child: DsTab(
                 text: 'All',
+                tabBorderStyle: TabBorderStyle.leftRounded,
                 type: _tabType(currentPage, 0),
                 onPressed: () {
                   _updateFilter(context, TodoFilterAll(), 0);
@@ -34,6 +35,7 @@ class TodoFilters extends StatelessWidget {
             Expanded(
               child: DsTab(
                 text: 'done',
+                tabBorderStyle: TabBorderStyle.rightRounded,
                 type: _tabType(currentPage, 2),
                 onPressed: () {
                   _updateFilter(context, TodoFilterDone(), 2);
