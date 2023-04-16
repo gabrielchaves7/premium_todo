@@ -8,17 +8,19 @@ import 'package:premium_todo/design_system/atoms/text_styles.dart';
 class DSTextField extends StatelessWidget {
   ///
   const DSTextField({
-    required this.label,
+    this.label,
     this.leadingIconPath,
     this.textInputType,
     this.inputFormatters,
     this.errorText,
     this.onChanged,
+    this.maxLines = 1,
+    this.hintText,
     super.key,
   });
 
   /// Label displayed on top of the input field
-  final String label;
+  final String? label;
 
   /// leading icon
   final String? leadingIconPath;
@@ -35,6 +37,12 @@ class DSTextField extends StatelessWidget {
   /// Called when user change the text field value
   final ValueChanged<String>? onChanged;
 
+  /// Max lines of the text input
+  final int maxLines;
+
+  /// Hint to show inside the input
+  final String? hintText;
+
   @override
   Widget build(BuildContext context) {
     final hasError = errorText != null;
@@ -46,46 +54,24 @@ class DSTextField extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: hasError ? const TextStyle(color: DsColors.red700) : null,
-          ).description,
-          const SizedBox(
-            height: DsSpacing.x,
-          ),
           TextField(
             onChanged: (value) => onChanged?.call(value.replaceAll(',', '')),
             keyboardType: textInputType,
             inputFormatters: inputFormatters,
+            maxLines: maxLines,
             style: DsTextStyles.headingSmall.merge(
               TextStyle(
                 color: hasError ? DsColors.red700 : DsColors.blueGray600,
               ),
             ),
             decoration: InputDecoration(
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: DsSpacing.xs),
+              hintText: hintText,
+              contentPadding: const EdgeInsets.symmetric(
+                  vertical: DsSpacing.xs, horizontal: DsSpacing.x),
               prefixIconConstraints: const BoxConstraints(
                 maxHeight: 24,
                 maxWidth: 40,
               ),
-              // prefixIcon: leadingIconPath != null
-              //     ? Padding(
-              //         padding: const EdgeInsetsDirectional.only(
-              //           start: DsSpacing.xs,
-              //           end: DsSpacing.xs,
-              //         ),
-              //         child: OriginIcon(
-              //           iconPath: leadingIconPath!,
-              //           colorFilter: hasError
-              //               ? const ColorFilter.mode(
-              //                   Colors.red,
-              //                   BlendMode.srcIn,
-              //                 )
-              //               : null,
-              //         ),
-              //       )
-              //     : null,
               enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: DsColors.blueGray50),
               ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:premium_todo/design_system/atoms/colors.dart';
+import 'package:premium_todo/design_system/atoms/spacing.dart';
 import 'package:premium_todo/design_system/molecules/ds_checkbox_tile.dart';
 import 'package:premium_todo/design_system/molecules/ds_tab.dart';
 import 'package:premium_todo/design_system/molecules/ds_text_form_field.dart';
@@ -11,10 +13,7 @@ class TodoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => TodoBloc(),
-      child: const TodoView(),
-    );
+    return const TodoView();
   }
 }
 
@@ -37,9 +36,9 @@ class _TodoViewState extends State<TodoView> {
     return Scaffold(
       appBar: AppBar(title: const Text('To do list')),
       body: Column(
-        children: [
+        children: const [
           TodoFilters(),
-          const TodoList(),
+          TodoList(),
         ],
       ),
       floatingActionButton: Column(
@@ -47,11 +46,72 @@ class _TodoViewState extends State<TodoView> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           FloatingActionButton(
-            onPressed: () => context.read<TodoBloc>()..add(CreateTodo()),
+            onPressed: () {
+              _showMyDialog();
+            },
             child: const Icon(Icons.add),
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          titlePadding: EdgeInsets.zero,
+          contentPadding: EdgeInsets.zero,
+          title: ColoredBox(
+            color: Colors.black,
+            child: Padding(
+              padding: const EdgeInsets.only(left: DsSpacing.xx),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'AlertDialog Title',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  IconButton(
+                    color: Colors.white,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.close),
+                  )
+                ],
+              ),
+            ),
+          ),
+          content: Padding(
+            padding:
+                const EdgeInsets.only(left: DsSpacing.xx, top: DsSpacing.xx),
+            child: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  DSTextField(
+                    hintText: 'Nome',
+                    maxLines: 3,
+                    onChanged: (value) =>
+                        context.read<TodoBloc>()..add(NameChanged(name: value)),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Save'),
+              onPressed: () {
+                context.read<TodoBloc>().add(CreateTodo());
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
