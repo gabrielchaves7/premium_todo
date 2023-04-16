@@ -43,7 +43,7 @@ class _TodoViewState extends State<TodoView> {
           }
         },
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: Column(
             children: const [
               TodoFilters(),

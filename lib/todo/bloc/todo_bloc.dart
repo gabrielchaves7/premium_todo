@@ -39,6 +39,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     CreateTodo event,
     Emitter<TodoState> emit,
   ) async {
+    emit(state.copyWith(loading: true));
     final newTodo =
         TodoModel(id: const Uuid().v4(), name: state.todoForm.name.value);
     final newTodos = [...state.todos, newTodo];
@@ -68,6 +69,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     GetTodos event,
     Emitter<TodoState> emit,
   ) async {
+    emit(state.copyWith(loading: true));
     final result = await _getTodos.call();
     result.fold(
       (l) => emit(state.copyWith(dsSnackbarType: DsSnackbarType.todoGetError)),
@@ -103,6 +105,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     DeleteTodo event,
     Emitter<TodoState> emit,
   ) async {
+    emit(state.copyWith(loading: true));
     final newTodos = List<TodoModel>.from(
       state.todos
           .map((e) => TodoModel(id: e.id, name: e.name, status: e.status)),

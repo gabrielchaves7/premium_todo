@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:premium_todo/design_system/atoms/dialog.dart';
+import 'package:premium_todo/design_system/atoms/spacing.dart';
+import 'package:premium_todo/design_system/atoms/text_styles.dart';
 import 'package:premium_todo/design_system/molecules/ds_checkbox_tile.dart';
 import 'package:premium_todo/todo/bloc/todo_bloc.dart';
 import 'package:premium_todo/todo/model/todo_model.dart';
@@ -13,12 +15,17 @@ class TodoList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TodoBloc, TodoState>(
       builder: (context, state) {
-        Widget widget = const Center(child: CircularProgressIndicator());
+        Widget widget = Padding(
+          padding: const EdgeInsets.symmetric(vertical: DsSpacing.xxxx),
+          child: const Text('There is nothing to show here yet.').headingSmall,
+        );
         final todos = context.read<TodoBloc>().state.todoFilter.filterList(
               state.todos,
             );
 
-        if (todos.isNotEmpty) {
+        if (state.loading) {
+          widget = const Center(child: CircularProgressIndicator());
+        } else if (todos.isNotEmpty) {
           widget = Expanded(
             child: ListView.builder(
               itemCount: todos.length,

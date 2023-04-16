@@ -9,6 +9,7 @@ class TodoState extends Equatable {
     required this.todoFilter,
     this.currentPage = 0,
     this.dsSnackbarType,
+    this.loading = false,
   });
 
   final List<TodoModel> todos;
@@ -16,10 +17,11 @@ class TodoState extends Equatable {
   final TodoFilter todoFilter;
   final int currentPage;
   final DsSnackbarType? dsSnackbarType;
+  final bool loading;
 
   @override
   List<Object?> get props =>
-      [todos, todoForm, todoFilter, currentPage, dsSnackbarType];
+      [todos, todoForm, todoFilter, currentPage, dsSnackbarType, loading];
 
   TodoState copyWith({
     List<TodoModel>? newTodos,
@@ -27,6 +29,7 @@ class TodoState extends Equatable {
     TodoFilter? newTodofilter,
     int? newCurrentPage,
     DsSnackbarType? dsSnackbarType,
+    bool loading = false,
   }) {
     return TodoState(
       todos: newTodos ?? todos,
@@ -34,6 +37,7 @@ class TodoState extends Equatable {
       todoFilter: newTodofilter ?? todoFilter,
       currentPage: newCurrentPage ?? currentPage,
       dsSnackbarType: dsSnackbarType,
+      loading: loading,
     );
   }
 }
