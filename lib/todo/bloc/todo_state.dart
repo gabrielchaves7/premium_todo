@@ -7,9 +7,12 @@ class TodoState extends Equatable {
     this.todos = const <TodoModel>[],
     required this.todoForm,
     required this.todoFilter,
+    required this.listKey,
     this.currentPage = 0,
     this.dsSnackbarType,
     this.loading = false,
+    this.previousFilteredTodos = const <TodoModel>[],
+    this.filteredTodos = const <TodoModel>[],
   });
 
   final List<TodoModel> todos;
@@ -18,10 +21,22 @@ class TodoState extends Equatable {
   final int currentPage;
   final DsSnackbarType? dsSnackbarType;
   final bool loading;
+  final GlobalKey<AnimatedListState> listKey;
+  final List<TodoModel> previousFilteredTodos;
+  final List<TodoModel> filteredTodos;
 
   @override
-  List<Object?> get props =>
-      [todos, todoForm, todoFilter, currentPage, dsSnackbarType, loading];
+  List<Object?> get props => [
+        todos,
+        todoForm,
+        todoFilter,
+        currentPage,
+        dsSnackbarType,
+        loading,
+        listKey,
+        filteredTodos,
+        previousFilteredTodos,
+      ];
 
   TodoState copyWith({
     List<TodoModel>? newTodos,
@@ -30,6 +45,8 @@ class TodoState extends Equatable {
     int? newCurrentPage,
     DsSnackbarType? dsSnackbarType,
     bool loading = false,
+    List<TodoModel>? newPreviousFilteredTodos,
+    List<TodoModel>? newFilteredTodos,
   }) {
     return TodoState(
       todos: newTodos ?? todos,
@@ -38,6 +55,9 @@ class TodoState extends Equatable {
       currentPage: newCurrentPage ?? currentPage,
       dsSnackbarType: dsSnackbarType,
       loading: loading,
+      listKey: listKey,
+      previousFilteredTodos: newPreviousFilteredTodos ?? previousFilteredTodos,
+      filteredTodos: newFilteredTodos ?? filteredTodos,
     );
   }
 }

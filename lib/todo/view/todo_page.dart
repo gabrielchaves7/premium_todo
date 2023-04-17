@@ -24,8 +24,6 @@ class TodoView extends StatefulWidget {
 }
 
 class _TodoViewState extends State<TodoView> {
-  final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
-
   @override
   void initState() {
     context.read<TodoBloc>().add(GetTodos());
@@ -47,11 +45,9 @@ class _TodoViewState extends State<TodoView> {
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Column(
-            children: [
-              const TodoFilters(),
-              TodoList(
-                listKey: listKey,
-              ),
+            children: const [
+              TodoFilters(),
+              TodoList(),
             ],
           ),
         ),
@@ -67,9 +63,6 @@ class _TodoViewState extends State<TodoView> {
                   context: context,
                   widget: TodoDialog(
                     todoBloc: context.read<TodoBloc>(),
-                    onEventSuccess: () {
-                      listKey.currentState!.insertItem(state.todos.length);
-                    },
                   ),
                 ),
                 child: const Icon(Icons.add),

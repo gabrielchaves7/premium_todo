@@ -57,7 +57,7 @@ void main() {
       expect(find.text('Todo 2'), findsOneWidget);
 
       await tester.tap(find.text('pending'));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(find.text('Todo 1'), findsOneWidget);
       expect(find.text('Todo 2'), findsNothing);

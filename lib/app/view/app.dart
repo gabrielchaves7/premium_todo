@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:premium_todo/design_system/atoms/colors.dart';
 import 'package:premium_todo/todo/todo.dart';
 
 class App extends StatelessWidget {
@@ -11,9 +12,9 @@ class App extends StatelessWidget {
       create: (_) => TodoBloc(),
       child: MaterialApp(
         theme: ThemeData(
-          appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
+          appBarTheme: const AppBarTheme(color: DsColors.brandColorPrimary),
           colorScheme: ColorScheme.fromSwatch(
-            accentColor: const Color(0xFF13B9FF),
+            accentColor: DsColors.brandColorPrimaryLight,
           ),
         ),
         home: const TodoPage(),

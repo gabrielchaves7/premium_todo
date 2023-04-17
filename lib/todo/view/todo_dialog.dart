@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:premium_todo/design_system/atoms/colors.dart';
 import 'package:premium_todo/design_system/atoms/spacing.dart';
 import 'package:premium_todo/design_system/molecules/ds_button.dart';
 import 'package:premium_todo/design_system/molecules/ds_text_form_field.dart';
@@ -8,7 +9,6 @@ import 'package:premium_todo/todo/model/todo_model.dart';
 class TodoDialog extends StatelessWidget {
   const TodoDialog({
     required this.todoBloc,
-    required this.onEventSuccess,
     super.key,
     this.isDelete = false,
     this.todo,
@@ -20,7 +20,6 @@ class TodoDialog extends StatelessWidget {
   final TodoBloc todoBloc;
   final TodoModel? todo;
   final bool isDelete;
-  final VoidCallback onEventSuccess;
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +35,10 @@ class TodoDialog extends StatelessWidget {
             children: [
               const Text(
                 'Todo',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: DsColors.neutralWhite),
               ),
               IconButton(
-                color: Colors.white,
+                color: DsColors.neutralWhite,
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -76,10 +75,7 @@ class TodoDialog extends StatelessWidget {
                   child: const Text('Delete'),
                   onPressed: () {
                     todoBloc.add(
-                      DeleteTodo(
-                        id: todo!.id,
-                        onDeleted: onEventSuccess,
-                      ),
+                      DeleteTodo(id: todo!.id),
                     );
                     Navigator.pop(context);
                   },
@@ -90,7 +86,7 @@ class TodoDialog extends StatelessWidget {
                 child: DsOutlinedButton(
                   child: const Text('Save'),
                   onPressed: () {
-                    todoBloc.add(CreateTodo(onCreated: onEventSuccess));
+                    todoBloc.add(CreateTodo());
                     Navigator.pop(context);
                   },
                 ),

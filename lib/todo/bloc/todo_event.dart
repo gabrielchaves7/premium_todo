@@ -8,8 +8,7 @@ abstract class TodoEvent extends Equatable {
 }
 
 class CreateTodo extends TodoEvent {
-  CreateTodo({required this.onCreated});
-  VoidCallback onCreated;
+  CreateTodo();
 }
 
 class NameChanged extends TodoEvent {
@@ -26,13 +25,15 @@ class UpdateTodoStatus extends TodoEvent {
 }
 
 class ChangeTodoFilter extends TodoEvent {
-  ChangeTodoFilter({required this.todoFilter, required this.newCurrentPage});
+  ChangeTodoFilter({
+    required this.todoFilter,
+    required this.newCurrentPage,
+  });
   final TodoFilter todoFilter;
   final int newCurrentPage;
 }
 
 class DeleteTodo extends TodoEvent {
-  DeleteTodo({required this.id, required this.onDeleted});
+  DeleteTodo({required this.id});
   final String id;
-  VoidCallback onDeleted;
 }

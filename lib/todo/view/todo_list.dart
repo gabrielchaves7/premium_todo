@@ -9,8 +9,7 @@ import 'package:premium_todo/todo/model/todo_model.dart';
 import 'package:premium_todo/todo/view/todo_dialog.dart';
 
 class TodoList extends StatelessWidget {
-  const TodoList({super.key, required this.listKey});
-  final GlobalKey<AnimatedListState> listKey;
+  const TodoList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,23 +19,22 @@ class TodoList extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: DsSpacing.xxxx),
           child: const Text('There is nothing to show here yet.').headingSmall,
         );
-        final todos = context.read<TodoBloc>().state.todoFilter.filterList(
-              state.todos,
-            );
+        final todos = context.read<TodoBloc>().state.filteredTodos;
 
         if (state.loading) {
           widget = const Center(child: CircularProgressIndicator());
         } else if (todos.isNotEmpty) {
           widget = Expanded(
             child: AnimatedList(
-              key: listKey,
+              key: state.listKey,
               initialItemCount: todos.length,
               itemBuilder: (context, index, animation) {
+                if (index > todos.length - 1) return Container();
                 final todo = todos[index];
                 final isChecked = todo.status == TodoStatus.done;
 
-                return SizeTransition(
-                  sizeFactor: animation,
+                return FadeTransition(
+                  opacity: animation,
                   child: DsCheckboxTile(
                     title: todo.name,
                     value: isChecked,
@@ -57,13 +55,6 @@ class TodoList extends StatelessWidget {
                             isDelete: true,
                             todo: todo,
                             todoBloc: context.read<TodoBloc>(),
-                            onEventSuccess: () {
-                              listKey.currentState!.removeItem(
-                                index,
-                                (context, animation) => DsCheckboxTile(
-                                    title: todo.name, value: isChecked),
-                              );
-                            },
                           ),
                         );
                       },

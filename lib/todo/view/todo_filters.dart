@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:premium_todo/design_system/molecules/ds_tab.dart';
 import 'package:premium_todo/todo/bloc/todo_bloc.dart';
 import 'package:premium_todo/todo/bloc/todo_filters.dart';
+import 'package:premium_todo/todo/model/todo_model.dart';
 
 class TodoFilters extends StatelessWidget {
   const TodoFilters({super.key});
@@ -20,7 +21,12 @@ class TodoFilters extends StatelessWidget {
                 tabBorderStyle: TabBorderStyle.leftRounded,
                 type: _tabType(currentPage, 0),
                 onPressed: () {
-                  _updateFilter(context, TodoFilterAll(), 0);
+                  _updateFilter(
+                    context: context,
+                    filter: TodoFilterAll(),
+                    newCurrentPage: 0,
+                    currentTodos: state.todos,
+                  );
                 },
               ),
             ),
@@ -29,7 +35,12 @@ class TodoFilters extends StatelessWidget {
                 text: 'pending',
                 type: _tabType(currentPage, 1),
                 onPressed: () {
-                  _updateFilter(context, TodoFilterPending(), 1);
+                  _updateFilter(
+                    context: context,
+                    filter: TodoFilterPending(),
+                    newCurrentPage: 1,
+                    currentTodos: state.todos,
+                  );
                 },
               ),
             ),
@@ -39,7 +50,12 @@ class TodoFilters extends StatelessWidget {
                 tabBorderStyle: TabBorderStyle.rightRounded,
                 type: _tabType(currentPage, 2),
                 onPressed: () {
-                  _updateFilter(context, TodoFilterDone(), 2);
+                  _updateFilter(
+                    context: context,
+                    filter: TodoFilterDone(),
+                    newCurrentPage: 2,
+                    currentTodos: state.todos,
+                  );
                 },
               ),
             ),
@@ -49,11 +65,12 @@ class TodoFilters extends StatelessWidget {
     );
   }
 
-  void _updateFilter(
-    BuildContext context,
-    TodoFilter filter,
-    int newCurrentPage,
-  ) {
+  void _updateFilter({
+    required BuildContext context,
+    required TodoFilter filter,
+    required int newCurrentPage,
+    required List<TodoModel> currentTodos,
+  }) {
     context.read<TodoBloc>().add(
           ChangeTodoFilter(todoFilter: filter, newCurrentPage: newCurrentPage),
         );

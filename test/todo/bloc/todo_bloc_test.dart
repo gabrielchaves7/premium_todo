@@ -8,6 +8,7 @@ import 'package:premium_todo/todo/model/todo_model.dart';
 import '../todos_test.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('TodoBloc', () {
     blocTest<TodoBloc, TodoState>(
       'should add new todo to array when CreateTodo is called',
@@ -27,7 +28,7 @@ void main() {
 
         return todoBloc;
       },
-      act: (bloc) => bloc.add(CreateTodo(onCreated: () {})),
+      act: (bloc) => bloc.add(CreateTodo()),
       verify: (_) {
         expect(_.state.todos.length, 1);
       },
@@ -126,7 +127,7 @@ void main() {
       },
       act: (bloc) => bloc
         ..add(GetTodos())
-        ..add(DeleteTodo(id: '1', onDeleted: () {})),
+        ..add(DeleteTodo(id: '1')),
       verify: (_) {
         expect(_.state.todos.length, 0);
       },
