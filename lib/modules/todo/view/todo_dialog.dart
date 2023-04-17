@@ -46,7 +46,10 @@ class TodoDialog extends StatelessWidget {
       ),
       content: Padding(
         padding: const EdgeInsets.only(
-            left: DsSpacing.xx, top: DsSpacing.xx, right: DsSpacing.xx),
+          left: DsSpacing.xx,
+          top: DsSpacing.xx,
+          right: DsSpacing.xx,
+        ),
         child: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[

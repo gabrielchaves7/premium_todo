@@ -70,10 +70,12 @@ class DSTextField extends StatelessWidget {
               ),
             ),
             decoration: InputDecoration(
-              border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
+              border: const OutlineInputBorder(),
               hintText: hintText,
               contentPadding: const EdgeInsets.symmetric(
-                  vertical: DsSpacing.xs, horizontal: DsSpacing.x),
+                vertical: DsSpacing.xs,
+                horizontal: DsSpacing.x,
+              ),
               prefixIconConstraints: const BoxConstraints(
                 maxHeight: 24,
                 maxWidth: 40,

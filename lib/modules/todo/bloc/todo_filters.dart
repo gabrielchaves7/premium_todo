@@ -1,3 +1,5 @@
+// ignore_for_file: one_member_abstracts
+
 import 'package:premium_todo/modules/todo/todo.dart';
 
 abstract class TodoFilter {

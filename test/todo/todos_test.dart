@@ -12,10 +12,11 @@ class MockTodoBloc extends Mock implements TodoBloc {}
 
 void main() {}
 
-TodoBloc mockTodoBloc(
-    {AddTodoUC? addTodoUC,
-    GetTodosUC? getTodosUC,
-    DeleteTodoUC? deleteTodoUC}) {
+TodoBloc mockTodoBloc({
+  AddTodoUC? addTodoUC,
+  GetTodosUC? getTodosUC,
+  DeleteTodoUC? deleteTodoUC,
+}) {
   return TodoBloc(
     addTodoUC: addTodoUC ?? MockAddTodoUC(),
     getTodos: getTodosUC ?? MockGetTodosUC(),
