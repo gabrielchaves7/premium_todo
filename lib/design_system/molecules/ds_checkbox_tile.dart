@@ -29,7 +29,12 @@ class DsCheckboxTile extends StatelessWidget {
     return ListTile(
       minVerticalPadding: 0,
       contentPadding: EdgeInsets.zero,
-      title: Text(title),
+      title: Text(
+        title,
+        style: value
+            ? const TextStyle(decoration: TextDecoration.lineThrough)
+            : null,
+      ),
       leading: DsCheckbox(
         value: value,
         onChanged: onChanged,
