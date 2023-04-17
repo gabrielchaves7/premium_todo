@@ -27,7 +27,7 @@ void main() {
 
         return todoBloc;
       },
-      act: (bloc) => bloc.add(CreateTodo()),
+      act: (bloc) => bloc.add(CreateTodo(onCreated: () {})),
       verify: (_) {
         expect(_.state.todos.length, 1);
       },
@@ -126,7 +126,7 @@ void main() {
       },
       act: (bloc) => bloc
         ..add(GetTodos())
-        ..add(DeleteTodo(id: '1')),
+        ..add(DeleteTodo(id: '1', onDeleted: () {})),
       verify: (_) {
         expect(_.state.todos.length, 0);
       },

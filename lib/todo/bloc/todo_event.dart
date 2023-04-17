@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 part of 'todo_bloc.dart';
 
 abstract class TodoEvent extends Equatable {
@@ -5,7 +7,10 @@ abstract class TodoEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class CreateTodo extends TodoEvent {}
+class CreateTodo extends TodoEvent {
+  CreateTodo({required this.onCreated});
+  VoidCallback onCreated;
+}
 
 class NameChanged extends TodoEvent {
   NameChanged({required this.name});
@@ -27,6 +32,7 @@ class ChangeTodoFilter extends TodoEvent {
 }
 
 class DeleteTodo extends TodoEvent {
-  DeleteTodo({required this.id});
+  DeleteTodo({required this.id, required this.onDeleted});
   final String id;
+  VoidCallback onDeleted;
 }

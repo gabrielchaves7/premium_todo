@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:premium_todo/bootstrap.dart';
 import 'package:premium_todo/design_system/atoms/ds_snackbar.dart';
 import 'package:premium_todo/todo/bloc/todo_filters.dart';
@@ -8,6 +9,7 @@ import 'package:premium_todo/todo/model/todo_model.dart';
 import 'package:premium_todo/todo/usecases/add_todo_usecase.dart';
 import 'package:premium_todo/todo/usecases/delete_todo_usecase.dart';
 import 'package:premium_todo/todo/usecases/get_todos_usecase.dart';
+import 'package:premium_todo/todo/view/todo_list.dart';
 import 'package:uuid/uuid.dart';
 
 part 'todo_event.dart';
@@ -45,15 +47,17 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     final newTodos = [...state.todos, newTodo];
     final result = await _addTodoUC.call(newTodos);
     result.fold(
-      (l) =>
-          emit(state.copyWith(dsSnackbarType: DsSnackbarType.todoCreateError)),
-      (r) => emit(
+        (l) => emit(
+            state.copyWith(dsSnackbarType: DsSnackbarType.todoCreateError)),
+        (r) {
+      emit(
         state.copyWith(
           newTodos: newTodos,
           dsSnackbarType: DsSnackbarType.todoCreateSuccess,
         ),
-      ),
-    );
+      );
+      event.onCreated();
+    });
   }
 
   void _mapNameChangedEventToState(
@@ -116,12 +120,16 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     result.fold(
       (l) =>
           emit(state.copyWith(dsSnackbarType: DsSnackbarType.todoDeleteError)),
-      (r) => emit(
-        state.copyWith(
-          newTodos: newTodos,
-          dsSnackbarType: DsSnackbarType.todoDeleteSuccess,
-        ),
-      ),
+      (r) {
+        emit(
+          state.copyWith(
+            newTodos: newTodos,
+            dsSnackbarType: DsSnackbarType.todoDeleteSuccess,
+          ),
+        );
+
+        event.onDeleted();
+      },
     );
   }
 }

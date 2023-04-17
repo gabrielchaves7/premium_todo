@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:premium_todo/design_system/atoms/spacing.dart';
 import 'package:premium_todo/design_system/molecules/ds_button.dart';
 import 'package:premium_todo/design_system/molecules/ds_text_form_field.dart';
@@ -9,6 +8,7 @@ import 'package:premium_todo/todo/model/todo_model.dart';
 class TodoDialog extends StatelessWidget {
   const TodoDialog({
     required this.todoBloc,
+    required this.onEventSuccess,
     super.key,
     this.isDelete = false,
     this.todo,
@@ -20,6 +20,7 @@ class TodoDialog extends StatelessWidget {
   final TodoBloc todoBloc;
   final TodoModel? todo;
   final bool isDelete;
+  final VoidCallback onEventSuccess;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +75,12 @@ class TodoDialog extends StatelessWidget {
                 child: DsOutlinedButton(
                   child: const Text('Delete'),
                   onPressed: () {
-                    todoBloc.add(DeleteTodo(id: todo!.id));
+                    todoBloc.add(
+                      DeleteTodo(
+                        id: todo!.id,
+                        onDeleted: onEventSuccess,
+                      ),
+                    );
                     Navigator.pop(context);
                   },
                 ),
@@ -84,7 +90,7 @@ class TodoDialog extends StatelessWidget {
                 child: DsOutlinedButton(
                   child: const Text('Save'),
                   onPressed: () {
-                    todoBloc.add(CreateTodo());
+                    todoBloc.add(CreateTodo(onCreated: onEventSuccess));
                     Navigator.pop(context);
                   },
                 ),

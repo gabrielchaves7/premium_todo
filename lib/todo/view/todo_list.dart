@@ -9,7 +9,8 @@ import 'package:premium_todo/todo/model/todo_model.dart';
 import 'package:premium_todo/todo/view/todo_dialog.dart';
 
 class TodoList extends StatelessWidget {
-  const TodoList({super.key});
+  const TodoList({super.key, required this.listKey});
+  final GlobalKey<AnimatedListState> listKey;
 
   @override
   Widget build(BuildContext context) {
@@ -27,37 +28,49 @@ class TodoList extends StatelessWidget {
           widget = const Center(child: CircularProgressIndicator());
         } else if (todos.isNotEmpty) {
           widget = Expanded(
-            child: ListView.builder(
-              itemCount: todos.length,
-              itemBuilder: (context, index) {
+            child: AnimatedList(
+              key: listKey,
+              initialItemCount: todos.length,
+              itemBuilder: (context, index, animation) {
                 final todo = todos[index];
                 final isChecked = todo.status == TodoStatus.done;
-                return DsCheckboxTile(
-                  title: todo.name,
-                  value: isChecked,
-                  onChanged: (value) {
-                    context.read<TodoBloc>().add(
-                          UpdateTodoStatus(
-                            id: todo.id,
-                            newStatus:
-                                value! ? TodoStatus.done : TodoStatus.pending,
+
+                return SizeTransition(
+                  sizeFactor: animation,
+                  child: DsCheckboxTile(
+                    title: todo.name,
+                    value: isChecked,
+                    onChanged: (value) {
+                      context.read<TodoBloc>().add(
+                            UpdateTodoStatus(
+                              id: todo.id,
+                              newStatus:
+                                  value! ? TodoStatus.done : TodoStatus.pending,
+                            ),
+                          );
+                    },
+                    trailing: GestureDetector(
+                      onTap: () async {
+                        await openDialog(
+                          context: context,
+                          widget: TodoDialog(
+                            isDelete: true,
+                            todo: todo,
+                            todoBloc: context.read<TodoBloc>(),
+                            onEventSuccess: () {
+                              listKey.currentState!.removeItem(
+                                index,
+                                (context, animation) => DsCheckboxTile(
+                                    title: todo.name, value: isChecked),
+                              );
+                            },
                           ),
                         );
-                  },
-                  trailing: GestureDetector(
-                    onTap: () async {
-                      await openDialog(
-                        context: context,
-                        widget: TodoDialog(
-                          isDelete: true,
-                          todo: todo,
-                          todoBloc: context.read<TodoBloc>(),
-                        ),
-                      );
-                    },
-                    child: const Icon(
-                      Icons.more_horiz,
-                      semanticLabel: 'Open dialog to delete todo',
+                      },
+                      child: const Icon(
+                        Icons.more_horiz,
+                        semanticLabel: 'Open dialog to delete todo',
+                      ),
                     ),
                   ),
                 );

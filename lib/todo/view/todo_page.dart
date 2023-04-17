@@ -24,6 +24,8 @@ class TodoView extends StatefulWidget {
 }
 
 class _TodoViewState extends State<TodoView> {
+  final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
+
   @override
   void initState() {
     context.read<TodoBloc>().add(GetTodos());
@@ -45,9 +47,11 @@ class _TodoViewState extends State<TodoView> {
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Column(
-            children: const [
-              TodoFilters(),
-              TodoList(),
+            children: [
+              const TodoFilters(),
+              TodoList(
+                listKey: listKey,
+              ),
             ],
           ),
         ),
@@ -56,14 +60,21 @@ class _TodoViewState extends State<TodoView> {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            onPressed: () => openDialog(
-              context: context,
-              widget: TodoDialog(
-                todoBloc: context.read<TodoBloc>(),
-              ),
-            ),
-            child: const Icon(Icons.add),
+          BlocBuilder<TodoBloc, TodoState>(
+            builder: (context, state) {
+              return FloatingActionButton(
+                onPressed: () => openDialog(
+                  context: context,
+                  widget: TodoDialog(
+                    todoBloc: context.read<TodoBloc>(),
+                    onEventSuccess: () {
+                      listKey.currentState!.insertItem(state.todos.length);
+                    },
+                  ),
+                ),
+                child: const Icon(Icons.add),
+              );
+            },
           ),
         ],
       ),
