@@ -76,8 +76,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     NameChanged event,
     Emitter<TodoState> emit,
   ) {
-    final newTodoForm = state.todoForm
-      ..name = NameInput.dirty(value: event.name);
+    final newTodoForm = TodoForm(name: NameInput.dirty(value: event.name));
     emit(state.copyWith(newTodoForm: newTodoForm));
   }
 

@@ -18,6 +18,7 @@ class DsOutlinedButton extends StatelessWidget {
     required this.child,
     required this.onPressed,
     this.buttonType = DsOutlinedButtonType.primary,
+    this.enabled = true,
     super.key,
   });
 
@@ -30,6 +31,9 @@ class DsOutlinedButton extends StatelessWidget {
   /// will define the style of the button. Can be primary or secondary
   final DsOutlinedButtonType buttonType;
 
+  /// If false user wont be able to click at the button
+  final bool enabled;
+
   @override
   Widget build(Object context) {
     return Container(
@@ -40,7 +44,7 @@ class DsOutlinedButton extends StatelessWidget {
         minWidth: 320,
       ),
       child: OutlinedButton(
-        onPressed: onPressed,
+        onPressed: enabled ? onPressed : null,
         style: ButtonStyle(
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(

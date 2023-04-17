@@ -8,6 +8,7 @@ import 'package:premium_todo/design_system/atoms/text_styles.dart';
 class DSTextField extends StatelessWidget {
   ///
   const DSTextField({
+    required this.controller,
     this.label,
     this.leadingIconPath,
     this.textInputType,
@@ -19,6 +20,9 @@ class DSTextField extends StatelessWidget {
     this.enabled = true,
     super.key,
   });
+
+  /// Text controller
+  final TextEditingController controller;
 
   /// Label displayed on top of the input field
   final String? label;
@@ -59,6 +63,7 @@ class DSTextField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextField(
+            controller: controller,
             enabled: enabled,
             onChanged: (value) => onChanged?.call(value.replaceAll(',', '')),
             keyboardType: textInputType,

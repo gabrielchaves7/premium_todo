@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:premium_todo/design_system/design_system.dart';
 import 'package:premium_todo/modules/todo/todo.dart';
 
-class TodoDialog extends StatelessWidget {
+class TodoDialog extends StatefulWidget {
   const TodoDialog({
     required this.todoBloc,
     super.key,
@@ -16,6 +17,24 @@ class TodoDialog extends StatelessWidget {
   final TodoBloc todoBloc;
   final TodoModel? todo;
   final bool isDelete;
+
+  @override
+  State<TodoDialog> createState() => _TodoDialogState();
+}
+
+class _TodoDialogState extends State<TodoDialog> {
+  late final TextEditingController _textEditingController;
+  @override
+  void initState() {
+    _textEditingController =
+        TextEditingController(text: widget.todo?.name ?? '');
+    _textEditingController.addListener(() {
+      if (!widget.isDelete) {
+        widget.todoBloc.add(NameChanged(name: _textEditingController.text));
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,43 +73,49 @@ class TodoDialog extends StatelessWidget {
           child: ListBody(
             children: <Widget>[
               DSTextField(
-                hintText: isDelete ? todo?.name : 'Name',
+                controller: _textEditingController,
+                hintText: widget.isDelete ? widget.todo?.name : 'Name',
                 maxLines: 3,
-                enabled: !isDelete,
-                onChanged: isDelete
-                    ? null
-                    : (value) => todoBloc.add(NameChanged(name: value)),
-              ),
+                enabled: !widget.isDelete,
+              )
             ],
           ),
         ),
       ),
       actions: <Widget>[
-        Row(
-          children: [
-            if (isDelete)
-              Expanded(
-                child: DsOutlinedButton(
-                  child: const Text('Delete'),
-                  onPressed: () {
-                    todoBloc.add(
-                      DeleteTodo(id: todo!.id),
-                    );
-                    Navigator.pop(context);
-                  },
-                ),
-              )
-            else
-              Expanded(
-                child: DsOutlinedButton(
-                  child: const Text('Save'),
-                  onPressed: () {
-                    todoBloc.add(CreateTodo());
-                    Navigator.pop(context);
-                  },
-                ),
-              )
-          ],
+        BlocBuilder<TodoBloc, TodoState>(
+          buildWhen: (previous, current) =>
+              previous.todoForm.name.value != current.todoForm.name.value,
+          bloc: widget.todoBloc,
+          builder: (context, state) {
+            return Row(
+              children: [
+                if (widget.isDelete)
+                  Expanded(
+                    child: DsOutlinedButton(
+                      child: const Text('Delete'),
+                      onPressed: () {
+                        widget.todoBloc.add(
+                          DeleteTodo(id: widget.todo!.id),
+                        );
+                        Navigator.pop(context);
+                      },
+                    ),
+                  )
+                else
+                  Expanded(
+                    child: DsOutlinedButton(
+                      enabled: widget.todoBloc.state.todoForm.isValid,
+                      child: const Text('Save'),
+                      onPressed: () {
+                        widget.todoBloc.add(CreateTodo());
+                        Navigator.pop(context);
+                      },
+                    ),
+                  )
+              ],
+            );
+          },
         )
       ],
     );
