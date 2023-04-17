@@ -28,7 +28,7 @@ class TodoRepository {
 
       return Right(TodoModel.fromStringList(response));
     } catch (e) {
-      return Left(CreateTodoFailure());
+      return Left(GetTodosFailure());
     }
   }
 }

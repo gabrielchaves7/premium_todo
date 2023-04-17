@@ -4,5 +4,9 @@ abstract class Failure {
 }
 
 class CreateTodoFailure extends Failure implements Exception {
-  CreateTodoFailure() : super('Ocorreu um erro ao criar sua todo!');
+  CreateTodoFailure() : super('One error happened while creating a todo');
+}
+
+class GetTodosFailure extends Failure implements Exception {
+  GetTodosFailure() : super('One error happened while getting todos');
 }
