@@ -1,4 +1,4 @@
-import 'package:premium_todo/todo/model/todo_model.dart';
+import 'package:premium_todo/modules/todo/todo.dart';
 
 abstract class TodoFilter {
   List<TodoModel> filterList(List<TodoModel> todos);

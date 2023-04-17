@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:premium_todo/todo/model/todo_model.dart';
-
-import 'package:premium_todo/todo/todo.dart';
+import 'package:premium_todo/modules/todo/todo.dart';
 
 import '../../helpers/helpers.dart';
 import '../todos_test.dart';

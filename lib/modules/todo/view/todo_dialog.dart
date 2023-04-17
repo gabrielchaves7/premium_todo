@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:premium_todo/design_system/atoms/colors.dart';
-import 'package:premium_todo/design_system/atoms/spacing.dart';
-import 'package:premium_todo/design_system/molecules/ds_button.dart';
-import 'package:premium_todo/design_system/molecules/ds_text_form_field.dart';
-import 'package:premium_todo/todo/bloc/todo_bloc.dart';
-import 'package:premium_todo/todo/model/todo_model.dart';
+import 'package:premium_todo/design_system/design_system.dart';
+import 'package:premium_todo/modules/todo/todo.dart';
 
 class TodoDialog extends StatelessWidget {
   const TodoDialog({

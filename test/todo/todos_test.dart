@@ -1,10 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:premium_todo/todo/model/todo_model.dart';
-import 'package:premium_todo/todo/todo.dart';
-import 'package:premium_todo/todo/usecases/add_todo_usecase.dart';
-import 'package:premium_todo/todo/usecases/delete_todo_usecase.dart';
-import 'package:premium_todo/todo/usecases/get_todos_usecase.dart';
+import 'package:premium_todo/modules/todo/todo.dart';
 
 class MockAddTodoUC extends Mock implements AddTodoUC {}
 

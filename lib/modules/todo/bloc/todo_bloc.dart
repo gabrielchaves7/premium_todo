@@ -4,12 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:premium_todo/bootstrap.dart';
 import 'package:premium_todo/design_system/atoms/ds_snackbar.dart';
 import 'package:premium_todo/design_system/molecules/ds_checkbox_tile.dart';
-import 'package:premium_todo/todo/bloc/todo_filters.dart';
-import 'package:premium_todo/todo/forms/todo_form.dart';
-import 'package:premium_todo/todo/model/todo_model.dart';
-import 'package:premium_todo/todo/usecases/add_todo_usecase.dart';
-import 'package:premium_todo/todo/usecases/delete_todo_usecase.dart';
-import 'package:premium_todo/todo/usecases/get_todos_usecase.dart';
+import 'package:premium_todo/modules/todo/todo.dart';
 import 'package:uuid/uuid.dart';
 
 part 'todo_event.dart';

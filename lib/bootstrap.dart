@@ -4,12 +4,8 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
-import 'package:premium_todo/todo/bloc/todo_bloc.dart';
-import 'package:premium_todo/todo/repository/todo_repository.dart';
-import 'package:premium_todo/todo/shared_preferences.dart';
-import 'package:premium_todo/todo/usecases/add_todo_usecase.dart';
-import 'package:premium_todo/todo/usecases/delete_todo_usecase.dart';
-import 'package:premium_todo/todo/usecases/get_todos_usecase.dart';
+import 'package:premium_todo/modules/shared_preferences/shared_preferences.dart';
+import 'package:premium_todo/modules/todo/todo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;

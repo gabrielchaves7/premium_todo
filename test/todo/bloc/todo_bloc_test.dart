@@ -1,9 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:premium_todo/todo/bloc/todo_bloc.dart';
-import 'package:premium_todo/todo/bloc/todo_filters.dart';
-import 'package:premium_todo/todo/forms/todo_form.dart';
-import 'package:premium_todo/todo/model/todo_model.dart';
+import 'package:premium_todo/modules/todo/todo.dart';
 
 import '../todos_test.dart';
 

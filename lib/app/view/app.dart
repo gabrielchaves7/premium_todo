@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:premium_todo/design_system/atoms/colors.dart';
-import 'package:premium_todo/todo/todo.dart';
+import 'package:premium_todo/design_system/design_system.dart';
+import 'package:premium_todo/modules/todo/todo.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

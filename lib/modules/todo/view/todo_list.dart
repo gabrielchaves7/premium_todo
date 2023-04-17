@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:premium_todo/design_system/atoms/dialog.dart';
-import 'package:premium_todo/design_system/atoms/spacing.dart';
-import 'package:premium_todo/design_system/atoms/text_styles.dart';
-import 'package:premium_todo/design_system/molecules/ds_checkbox_tile.dart';
-import 'package:premium_todo/todo/bloc/todo_bloc.dart';
-import 'package:premium_todo/todo/model/todo_model.dart';
-import 'package:premium_todo/todo/view/todo_dialog.dart';
+import 'package:premium_todo/design_system/design_system.dart';
+import 'package:premium_todo/modules/todo/todo.dart';
 
 class TodoList extends StatelessWidget {
   const TodoList({super.key});

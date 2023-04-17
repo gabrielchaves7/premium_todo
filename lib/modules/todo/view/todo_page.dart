@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:premium_todo/design_system/atoms/dialog.dart';
 import 'package:premium_todo/design_system/atoms/ds_snackbar.dart';
-import 'package:premium_todo/todo/bloc/todo_bloc.dart';
-import 'package:premium_todo/todo/view/todo_dialog.dart';
-import 'package:premium_todo/todo/view/todo_filters.dart';
-import 'package:premium_todo/todo/view/todo_list.dart';
+import 'package:premium_todo/modules/todo/todo.dart';
 
 class TodoPage extends StatelessWidget {
   const TodoPage({super.key});
