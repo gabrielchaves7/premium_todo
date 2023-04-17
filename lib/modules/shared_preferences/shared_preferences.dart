@@ -20,6 +20,7 @@ class SharedPreferencesDataSource implements DataSource {
 
   @override
   List<String> getList(String key) {
-    return _prefs.getStringList(key)!;
+    final result = _prefs.getStringList(key);
+    return result ?? [];
   }
 }
